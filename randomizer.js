@@ -1,7 +1,7 @@
 function randomizer() {
-  randomString = '';
-  const possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-  const stringLength = 6;
+  let randomString = '';
+  let possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let stringLength = 6;
 
   function pickRandom() {
       return possible[Math.floor(Math.random() * possible.length)];

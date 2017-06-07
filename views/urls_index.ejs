@@ -12,10 +12,10 @@
         <% for (key in urls) { %>
           <tr>
             <td><%= urls[key] %></td>
-            <td><a href="#" target="#"><%= [key] %></a></td>
-            <td><a href="#">Edit</a></td>       <!-- POST -->
-            <td><a href="#">Stats</a></td>      <!-- GET -->
-            <td><a href="#">Delete</a></td>     <!-- POST -->
+            <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td>
+            <td><a href="/urls/<%= [key] %>">Edit</a></td>
+            <td><a href="#">Stats</a></td>
+            <td><a href="/urls/<%= [key] %>/delete">Delete</a></td>
             <% } %>
           </tr>
         </tbody>
