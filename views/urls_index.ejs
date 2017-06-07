@@ -15,7 +15,11 @@
             <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td>
             <td><a href="/urls/<%= [key] %>">Edit</a></td>
             <td><a href="/urls/<%= [key] %>#stats">Stats</a></td>
-            <td><a href="/urls/<%= [key] %>/delete">Delete</a></td>
+            <td>
+                <form method="POST" action="/urls/<%= [key] %>/delete">
+                  <input type="submit" value="Delete" />
+                </form>
+            </td>
             <% } %>
           </tr>
         </tbody>

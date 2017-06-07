@@ -7,6 +7,10 @@
     <br>
     <p>Re-directs to:</p>
     <h4><%= longURL %></h4>
+  <form method="POST" action="../urls/<%= [key] %>/delete">
+    <input type="submit" value="Delete" />
+  </form>
+
   </div>
 </body>
 </html>
