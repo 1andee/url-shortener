@@ -42,6 +42,11 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls/" + shortURL);
 });
 
+app.post("/urls/:id", (req, res) => {
+  urlDatabase[req.params.id] = protocolChecker(req.body.newURL);
+  res.redirect("/urls/" + req.params.id);
+});
+
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect('/urls');

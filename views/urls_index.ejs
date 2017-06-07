@@ -1,29 +1,37 @@
 <%- include('partials/_header') %>
 
-  <div class="container">
-    <table class="table">
-      <thead>
+<div class="container">
+  <table class="table">
+    <thead>
+      <tr>
+        <th>URL</th>
+        <th>Short Code</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% for (key in urls) { %>
         <tr>
-          <th>URL</th>
-          <th>Short Code</th>
+          <td><%= urls[key] %></td> <!-- LONG URL -->
+          <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td> <!-- SHORT URL -->
+          <td>
+            <a href="/urls/<%= [key] %>">
+            <button type="submit" class="btn btn-primary">Edit</button>
+          </a>
+        </td>
+          <td>
+            <a href="/urls/<%= [key] %>#stats">
+            <button type="submit" class="btn btn-primary">Stats</button>
+          </a>
+          </td>
+          <td>
+              <form method="POST" action="/urls/<%= [key] %>/delete">
+              <input type="submit" class="btn btn-danger" value="Delete" /></button>
+              </form>
+          </td>
         </tr>
-      </thead>
-      <tbody>
-        <% for (key in urls) { %>
-          <tr>
-            <td><%= urls[key] %></td>
-            <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td>
-            <td><a href="/urls/<%= [key] %>">Edit</a></td>
-            <td><a href="/urls/<%= [key] %>#stats">Stats</a></td>
-            <td>
-                <form method="POST" action="/urls/<%= [key] %>/delete">
-                  <input type="submit" value="Delete" />
-                </form>
-            </td>
-            <% } %>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </body>
-  </html>
+      <% } %>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>

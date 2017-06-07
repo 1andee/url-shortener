@@ -1,11 +1,11 @@
 <%- include('partials/_header') %>
 
-  <div class="container">
-    <form action="/urls" method="POST" style="margin:150px;">
-      <label for="longURL">Enter a URL:</label>
-      <input id="longURL" type="text" name="longURL" placeholder="http://" style="width: 300px">
-      <input type="submit" value="Submit">
-    </form>
-    </div>
-  </body>
-  </html>
+<div class="container">
+  <form action="/urls" method="POST" style="margin:150px;" class="form-inline">
+    <label for="longURL">Please enter a URL:</label>
+    <input id="longURL" type="text" name="longURL" style="width: 50%;" class="form-control" placeholder="http://" style="width: 300px">
+    <input type="submit" class="btn btn-primary" value="Submit">
+  </form>
+</div>
+</body>
+</html>
