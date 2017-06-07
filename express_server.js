@@ -13,7 +13,7 @@ var urlDatabase = {
 };
 
 app.get("/", (req, res) => {
-  res.end("Welcome to my URL shortening service");
+  res.render("index");
 });
 
 app.get("/urls", (req, res) => {
