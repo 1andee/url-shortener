@@ -1,8 +1,12 @@
 <%- include('partials/_header') %>
 
   <div class="container">
-    <h3><%= longURL %></h3>
-    <p><%= shortURL %></p>
+    <h3>Your Unique Short URL</h3>
+    <h3><a href="../u/<%= shortURL %>" target="_blank"><%= shortURL %></a></h3>
+    <br>
+    <br>
+    <p>Re-directs to:</p>
+    <h4><%= longURL %></h4>
   </div>
 </body>
 </html>
