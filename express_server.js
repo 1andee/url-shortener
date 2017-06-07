@@ -1,6 +1,7 @@
 var express = require("express");
 var app = express();
 var randomizer = require("./randomizer");
+var protocolChecker = require("./protocolChecker");
 var PORT = process.env.PORT || 8080; // default port 8080
 
 app.set("view engine", "ejs");
@@ -22,12 +23,10 @@ app.get("/urls", (req, res) => {
 })
 
 app.get("/urls/new", (req, res) => {
-  // console.log("urls_new");
   res.render("urls_new");
 });
 
 app.get("/urls/:id", (req, res) => {
-  // console.log("/urls/:id");
   let templateVars = { shortURL: req.params.id, longURL: urlDatabase[req.params.id] };
   res.render("urls_show", templateVars);
 });
@@ -39,7 +38,7 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/urls", (req, res) => {
   let shortURL = randomizer();
-  urlDatabase[shortURL] = req.body.longURL;
+  urlDatabase[shortURL] = protocolChecker(req.body.longURL);
   res.redirect("/urls/" + shortURL);
 });
 
