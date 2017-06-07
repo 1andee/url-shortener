@@ -1,8 +1,10 @@
 <%- include('partials/_header') %>
 
 <div class="container">
-  <button type="button" class="btn btn-primary btn-lg">Register</button>
-  <button type="button" class="btn btn-secondary btn-lg">Login</button>
+<form class="form-inline" method="POST" action="/login" >
+<input type="text" style="width: 50%;" class="form-control" id="username" name="username" placeholder="Name">
+<input type="submit" class="btn btn-primary" value="Login">
+</form>
 </div>
 </body>
 </html>
