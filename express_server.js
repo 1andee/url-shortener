@@ -52,7 +52,6 @@ app.get("/u/:shortURL", (req, res) => {
 });
 
 app.post("/login", (req, res) => {
-  console.log(req.body.username)
   res.cookie('username', req.body.username);
   // DO SOMETHING WITH COOKIE HERE
   // REDIRECT USER TO /URLS INDEX PAGE
@@ -73,6 +72,11 @@ app.post("/urls/:id", (req, res) => {
 app.post("/urls/:id/delete", (req, res) => {
   delete urlDatabase[req.params.id];
   res.redirect('/urls');
+});
+
+app.post("/logout", (req, res) => {
+  res.clearCookie('username', req.body.username);
+  res.redirect("/");
 });
 
 app.listen(PORT, () => {

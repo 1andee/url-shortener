@@ -16,9 +16,15 @@
   <h1 class="display-3" >URL Shortening service</h1>
   <p class="lead">A full-stack web app to shorten long URLs.</p>
 
-<button type="button" class="btn btn-primary btn-lg">Register</button>
+<button type="button" class="btn btn-primary btn-lg form-inline">Register</button>
 <button type="button" class="btn btn-secondary btn-lg">Login</button>
+<form method="POST" action="/logout">
+<button type="submit" class="btn btn-secondary btn-lg" value="Logout">Logout</button>
+</form>
 
+<% if (username) { %>
 Welcome, <%= username %>
+ <% } else{ %>
+<% } %>
 
 </div>
