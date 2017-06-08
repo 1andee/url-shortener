@@ -16,11 +16,11 @@
   <h1 class="display-3" >URL Shortening service</h1>
   <p class="lead">A full-stack web app to shorten long URLs.</p>
 
-  <% if (!username) { %>
-    <button type="button" class="btn btn-primary btn-lg form-inline">Register</button>
-    <button type="button" class="btn btn-secondary btn-lg">Login</button>
+  <% if (!user_id) { %>
+    <a href="/register" role="button" class="btn btn-primary btn-lg form-inline">Register</a>
+    <a href="/login" role="button" class="btn btn-primary btn-lg">Login</a>
   <% } %>
-  <% if (username) { %>
+  <% if (user_id) { %>
     <form method="POST" action="/logout" class="form-inline">
       <a href="/urls" class="btn btn-primary btn-lg" role="button">
         My URLs
@@ -32,6 +32,6 @@
         Logout
       </button>
     </form>
-    Welcome, <%= username %>
+    Signed in as <%=users[user_id].email%>
   <% } %>
 </div>

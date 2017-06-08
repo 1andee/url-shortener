@@ -1,0 +1,24 @@
+<%- include('partials/_header') %>
+
+<div class="container">
+<h3>Login</h3>
+<% if (!user_id) { %>
+<form class="form-inline" method="POST" action="/login" >
+<label for="email">Email:</label>
+<input type="text" style="width: 40%;" class="form-control" id="email" name="email" placeholder="you@gmail.com">
+<br>
+<br>
+<label for="password">Password:</label>
+<input type="password" style="width: 37.5%;" class="form-control" id="password" name="password"></input>
+<br>
+<br>
+<input type="submit" class="btn btn-primary" value="Login">
+</form>
+<% } %>
+<% if (user_id) { %>
+You are already logged in!
+<br><br>
+Go to "My URLs" or add a new link to get started.
+<% } %>
+
+</div>

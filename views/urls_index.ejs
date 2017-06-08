@@ -11,8 +11,8 @@
     <tbody>
       <% for (key in urls) { %>
         <tr>
-          <td><%= urls[key] %></td> <!-- LONG URL -->
-          <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td> <!-- SHORT URL -->
+          <td><%= urls[key] %></td>
+          <td><a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a></td>
           <td>
             <a href="/urls/<%= [key] %>">
             <button type="submit" class="btn btn-primary">Edit</button>
