@@ -53,8 +53,6 @@ app.get("/u/:shortURL", (req, res) => {
 
 app.post("/login", (req, res) => {
   res.cookie('username', req.body.username);
-  // DO SOMETHING WITH COOKIE HERE
-  // REDIRECT USER TO /URLS INDEX PAGE
   res.redirect("/urls");
 });
 

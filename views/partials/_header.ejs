@@ -6,7 +6,7 @@
   <style>
   .jumbotron {
     padding: 20px 20px;
-}
+  }
   </style>
 </head>
 
@@ -16,15 +16,22 @@
   <h1 class="display-3" >URL Shortening service</h1>
   <p class="lead">A full-stack web app to shorten long URLs.</p>
 
-<button type="button" class="btn btn-primary btn-lg form-inline">Register</button>
-<button type="button" class="btn btn-secondary btn-lg">Login</button>
-<form method="POST" action="/logout">
-<button type="submit" class="btn btn-secondary btn-lg" value="Logout">Logout</button>
-</form>
-
-<% if (username) { %>
-Welcome, <%= username %>
- <% } else{ %>
-<% } %>
-
+  <% if (!username) { %>
+    <button type="button" class="btn btn-primary btn-lg form-inline">Register</button>
+    <button type="button" class="btn btn-secondary btn-lg">Login</button>
+  <% } %>
+  <% if (username) { %>
+    <form method="POST" action="/logout" class="form-inline">
+      <a href="/urls" class="btn btn-primary btn-lg" role="button">
+        My URLs
+      </a>
+      <a href="/urls/new" class="btn btn-primary btn-lg form-inline" role="button">
+        Add new
+      </a>
+      <button type="submit" class="btn btn-primary btn-lg form-inline" value="Logout">
+        Logout
+      </button>
+    </form>
+    Welcome, <%= username %>
+  <% } %>
 </div>
