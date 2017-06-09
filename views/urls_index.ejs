@@ -1,6 +1,7 @@
 <%- include('partials/_header') %>
 
 <div class="container">
+  <% if (user_id) { %>
   <table class="table">
     <thead>
       <tr>
@@ -32,6 +33,11 @@
       <% } %>
     </tbody>
   </table>
+  <% } %>
+
+  <% if (!user_id) { %>
+    Register or login above!
+    <% } %>
 </div>
 </body>
 </html>

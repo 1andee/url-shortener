@@ -1,6 +1,7 @@
 <%- include('partials/_header') %>
 
 <div class="container">
+  <% if (user_id) { %>
   <h3>Your Unique Short URL</h3>
   <h3><a href="../u/<%= shortURL %>" target="_blank"><%= shortURL %></a></h3>
   <b><%= longURL %></b>
@@ -21,6 +22,11 @@
       <input type="submit" class="btn btn-danger form-inline" value="Delete" />
     </form>
   </p>
+  <% } %>
+
+  <% if (!user_id) { %>
+    Register or login above!
+    <% } %>
 </div>
 </body>
 </html>
