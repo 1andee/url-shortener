@@ -21,11 +21,16 @@ const users = {
 };
 
 app.get("/", (req, res) => {
+  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id: req.session.user_id
+    user_id
   };
-  res.render("index", templateVars);
+  if (user_id) {
+    res.redirect("/urls");
+  } else {
+    res.render("index", templateVars);
+  }
 });
 
 app.get("/register", (req, res) => {
