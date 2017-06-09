@@ -115,7 +115,6 @@ app.post("/register", (req, res) => {
 
 app.post("/login", (req, res) => {
   let { email, password } = req.body;
-  console.log(password);
   for (key in users) {
     if (users[key].email === email) {
       if (bcrypt.compareSync(password, users[key].password)) {
