@@ -34,11 +34,16 @@ app.get("/", (req, res) => {
 });
 
 app.get("/register", (req, res) => {
+  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id: req.session.user_id
+    user_id
   };
+  if (user_id) {
+    res.redirect("/urls");
+  } else {
   res.render("register", templateVars);
+}
 });
 
 app.get("/login", (req, res) => {
