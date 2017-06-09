@@ -66,7 +66,12 @@ app.get("/urls/new", (req, res) => {
     user_id,
     urls: urlDatabase[user_id]
   };
-  res.render("urls_new", templateVars);
+  if (user_id) {
+    res.render("urls_new", templateVars);
+  }
+  if (!user_id) {
+    res.redirect("/login");
+  }
 });
 
 app.get("/urls/:id", (req, res) => {
