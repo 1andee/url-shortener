@@ -11,28 +11,9 @@ const cookieParser = require('cookie-parser');
 app.use(cookieParser());
 
 const urlDatabase = {
-  "user1": {
-    "b2xVn2": "http://www.lighthouselabs.ca",
-    "9sm5xK": "http://www.airbnb.com",
-    "Op28xx": "http://www.cactus.com"
-  },
-  "user2": {
-    "c3yXo3": "http://www.cessna.ca",
-    "0tn6yL": "http://www.airbus.com"
-  }
 };
 
 const users = {
-  "user1": {
-    id: "user1",
-    email: "user1@example.com",
-    password: "a"
-  },
- "user2": {
-    id: "user2",
-    email: "user2@example.com",
-    password: "b"
-  }
 };
 
 app.get("/", (req, res) => {
@@ -127,16 +108,17 @@ app.post("/register", (req, res) => {
   };
   let user_id = randomizer();
   res.cookie('user_id', user_id);
-  users[user_id] = {id: user_id, email: email, password: password};
+  users[user_id] = {id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
   urlDatabase[user_id] = { };
   res.redirect("/urls");
 });
 
 app.post("/login", (req, res) => {
   let { email, password } = req.body;
+  console.log(password);
   for (key in users) {
     if (users[key].email === email) {
-      if (users[key].password === password) {
+      if (bcrypt.compareSync(password, users[key].password)) {
         res.cookie('user_id', users[key].id);
         res.redirect("/urls");
       }
