@@ -14,12 +14,15 @@ app.use(cookieSession({
   keys: ["key 1"]
 }));
 
+// Object to store all user-submitted URLs
 const urlDatabase = {
 };
 
+// Object to store the registered users (in lieu of database)
 const users = {
 };
 
+// Main page rendering
 app.get("/", (req, res) => {
   var user_id = req.session.user_id;
   let templateVars = {
@@ -33,6 +36,7 @@ app.get("/", (req, res) => {
   }
 });
 
+// Rendering of registration page (re-directs those already logged in)
 app.get("/register", (req, res) => {
   var user_id = req.session.user_id;
   let templateVars = {
@@ -46,14 +50,17 @@ app.get("/register", (req, res) => {
 }
 });
 
+// Rendering of login page
 app.get("/login", (req, res) => {
+  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id: req.session.user_id
+    user_id
   };
   res.render("login", templateVars);
 });
 
+// Rendering of urls_index
 app.get("/urls", (req, res) => {
   var user_id = req.session.user_id;
   let templateVars = {
@@ -64,6 +71,7 @@ app.get("/urls", (req, res) => {
   res.render("urls_index", templateVars);
 });
 
+// Rendering of /urls/new
 app.get("/urls/new", (req, res) => {
   var user_id = req.session.user_id;
   let templateVars = {
@@ -79,6 +87,7 @@ app.get("/urls/new", (req, res) => {
   }
 });
 
+// Rendering of urls_show (/urls:id)
 app.get("/urls/:id", (req, res) => {
   let { id } = req.params;
   let user_id = req.session.user_id;
@@ -97,6 +106,7 @@ app.get("/urls/:id", (req, res) => {
   res.status(403).send("Error 403: Unauthorized access.");
 });
 
+// Short-link redirection
 app.get("/u/:shortURL", (req, res) => {
   let flag = false;
   for (key in urlDatabase) {
@@ -113,9 +123,8 @@ app.get("/u/:shortURL", (req, res) => {
   }
 });
 
+// Registration form data
 app.post("/register", (req, res) => {
-  // let email = req.body.email;
-  // let password = req.body.password;
   let { email, password } = req.body;
   // Conditional checks for email
   if (email.length <= 5) {
@@ -130,6 +139,7 @@ app.post("/register", (req, res) => {
   if (!password) {
     res.status(400).send("Error 400: Please provide a password.");
   };
+  // Creating new user
   let user_id = randomizer();
   req.session.user_id = user_id;
   users[user_id] = {id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
@@ -137,6 +147,7 @@ app.post("/register", (req, res) => {
   res.redirect("/urls");
 });
 
+// Login form data
 app.post("/login", (req, res) => {
   let { email, password } = req.body;
   for (key in users) {
@@ -150,6 +161,7 @@ app.post("/login", (req, res) => {
   return res.status(403).send("Please check your username and/or password.");
 });
 
+// New URL submission
 app.post("/urls", (req, res) => {
   let user_id = req.session.user_id;
   let shortURL = randomizer();
@@ -157,12 +169,14 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls/" + shortURL);
 });
 
+// Edit existing shortURL
 app.post("/urls/:id", (req, res) => {
   let user_id = req.session.user_id;
   urlDatabase[user_id][req.params.id] = protocolChecker(req.body.newURL);
   res.redirect("/urls/" + req.params.id);
 });
 
+// Deletion of existing short URL
 app.post("/urls/:id/delete", (req, res) => {
   let user_id = req.session.user_id;
   delete urlDatabase[user_id][req.params.id];
