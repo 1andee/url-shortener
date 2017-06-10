@@ -97,6 +97,17 @@ app.get("/urls/:id", (req, res) => {
   res.status(403).send("Error 403: Unauthorized access.");
 });
 
+app.get("/u/:shortURL", (req, res) => {
+  for (key in urlDatabase) {
+    for (url in urlDatabase[key]) {
+      if (url === req.params.shortURL) {
+      res.redirect(urlDatabase[key][url]);
+      break;
+      }
+    }
+  }
+});
+
 app.post("/register", (req, res) => {
   // let email = req.body.email;
   // let password = req.body.password;
