@@ -161,16 +161,21 @@ app.post("/register", (req, res) => {
 
 // Login form data
 app.post("/login", (req, res) => {
+  let flag = false;
   let { email, password } = req.body;
   for (key in users) {
     if (users[key].email === email) {
       if (bcrypt.compareSync(password, users[key].password)) {
+        flag = true;
         req.session.user_id = users[key].id;
         res.redirect("/urls");
+        return;
       }
     }
   }
+  if (!flag) {
   return res.status(403).send("Please check your username and/or password.");
+  }
 });
 
 // New URL submission
