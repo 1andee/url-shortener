@@ -1,6 +1,6 @@
 // Checks if the user-defined link includes a valid protocol
 // Links without a valid protocol are modified to use HTTP and returned
-// Regex form: url.startsWith(/http(s)?:\/\//)
+// Regex form of if statement: url.startsWith(/http(s)?:\/\//)
 
 function protocolChecker(url) {
   if (((url.substring(0,7)) === 'http://')

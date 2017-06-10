@@ -1,32 +1,33 @@
 <%- include('partials/_header') %>
 
-<div class="container">
-  <% if (user_id) { %>
-  <h3>Your Unique Short URL</h3>
-  <h3><a href="../u/<%= shortURL %>" target="_blank"><%= shortURL %></a></h3>
-  <b><%= longURL %></b>
-</div>
-<br><br>
-<div class="container">
-  <h4>Update</h4>
-  <p>
-    <form method="POST" class="form-inline" action="/urls/<%= shortURL %>">
-      <input type="text" style="width: 50%;" class="form-control" id="newURL" name="newURL" placeholder="<%= longURL %>">
-      <button type="submit" class="btn btn-primary">Update</button>
-    </form>
-  </p>
-  <br>
-  <p>
-    <a href="/urls"><button type="text" class="btn btn-primary form-inline">Back</button></a>
-    <form method="POST" action="/urls/<%= shortURL %>/delete">
-      <input type="submit" class="btn btn-danger form-inline" value="Delete" />
-    </form>
-  </p>
-  <% } %>
+    <div class="container">
+      <% if (user_id) { %>
+      <h3>Your Unique Short URL</h3>
+      <a href="../u/<%= shortURL %>" target="_blank"><h3><%= shortURL %></h3></a>
+      <b><%= longURL %></b>
+    </div>
+    <br>
+    <br>
+    <div class="container">
+      <h4>Update</h4>
+      <p>
+        <form method="POST" class="form-inline" action="/urls/<%= shortURL %>">
+          <input type="text" style="width: 50%;" class="form-control" id="newURL" name="newURL" placeholder="<%= longURL %>">
+          <button type="submit" class="btn btn-primary">Update</button>
+        </form>
+      </p>
+      <br>
+      <p>
+        <a href="/urls"><button type="text" class="btn btn-primary form-inline">Back</button></a>
+        <form method="POST" action="/urls/<%= shortURL %>/delete">
+          <input type="submit" class="btn btn-danger form-inline" value="Delete" />
+        </form>
+      </p>
+      <% } %>
 
-  <% if (!user_id) { %>
-    Register or login above!
-    <% } %>
-</div>
-</body>
+      <% if (!user_id) { %>
+        Register or login above!
+      <% } %>
+    </div>
+  </body>
 </html>

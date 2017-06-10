@@ -1,6 +1,6 @@
 {
   "name": "url-shortener",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "A full-stack web app built with Node and Express to shorten long URLs.",
   "main": "express_server.js",
   "dependencies": {
