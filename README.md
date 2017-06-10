@@ -1,6 +1,10 @@
 # URL Shortener
 A full-stack web app built with Node and Express to shorten long URLs.
 
+# Screenshots
+!["Screenshot of Login page"](https://github.com/1andee/url-shortener/blob/master/docs/login-page.png)
+!["Screenshot of URLs page"](https://github.com/1andee/url-shortener/blob/master/docs/urls-page.png)
+
 ## Getting Started
 From the project directory, install all required dependencies using the `npm install` command.
 
