@@ -98,13 +98,18 @@ app.get("/urls/:id", (req, res) => {
 });
 
 app.get("/u/:shortURL", (req, res) => {
+  let flag = false;
   for (key in urlDatabase) {
     for (url in urlDatabase[key]) {
       if (url === req.params.shortURL) {
+      flag = true;
       res.redirect(urlDatabase[key][url]);
-      break;
+      return;
       }
     }
+  }
+  if (!flag) {
+  res.status(404).send("Error 404: Something blew up. File not found.");
   }
 });
 
