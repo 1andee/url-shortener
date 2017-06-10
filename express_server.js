@@ -1,14 +1,16 @@
 const express = require("express");
+var methodOverride = require('method-override')
 const app = express();
 app.set("view engine", "ejs");
 const PORT = process.env.PORT || 8080; // default port 8080
 const bodyParser = require("body-parser");
-app.use(bodyParser.urlencoded({extended: true}));
+const cookieSession = require('cookie-session');
+const bcrypt = require('bcrypt');
 const randomizer = require("./randomizer");
 const protocolChecker = require("./protocolChecker");
-const bcrypt = require('bcrypt');
-const cookieSession = require('cookie-session');
 
+app.use(methodOverride('_method'))
+app.use(bodyParser.urlencoded({extended: true}));
 app.use(cookieSession({
   name: 'session',
   keys: ["key 1"]
@@ -179,15 +181,15 @@ app.post("/urls", (req, res) => {
   res.redirect("/urls/" + shortURL);
 });
 
-// Edit existing shortURL
-app.post("/urls/:id", (req, res) => {
+// Update existing shortURL
+app.put("/urls/:id", (req, res) => {
   let user_id = req.session.user_id;
   urlDatabase[user_id][req.params.id] = protocolChecker(req.body.newURL);
   res.redirect("/urls/" + req.params.id);
 });
 
 // Deletion of existing short URL
-app.post("/urls/:id/delete", (req, res) => {
+app.delete("/urls/:id", (req, res) => {
   let user_id = req.session.user_id;
   delete urlDatabase[user_id][req.params.id];
   res.redirect('/urls');

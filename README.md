@@ -19,6 +19,7 @@ Once the server is running, enter `http://localhost:8080/` in the address bar of
 - bcrypt
 - body-parser
 - cookie-session
+- method-override
 
 ## User Stories
 - As an avid twitter poster, I want to be able to shorten links  so that I can fit more non-link text in my tweets.
