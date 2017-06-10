@@ -1,14 +1,20 @@
 # URL Shortener
 A full-stack web app built with Node and Express to shorten long URLs.
 
-## Project setup
-From the project directory, run the following command in terminal:
-```
-node express_server.js
-````
-Once the server is running, enter http://localhost:8080/ in the address bar of your preferred web browser (and by that, we mean Google Chrome).
+## Getting Started
+*From the project directory, install all required dependencies using the `npm install` command.
 
-That's all there is to it!
+*Enter `npm start` or `node express_server.js` in your terminal window.
+
+*Once the server is running, enter `http://localhost:8080/` in the address bar of your web browser to launch the app. The app's functionality can be accessed once registered as a new user.
+
+## Dependencies
+*Node.js
+*Express
+*EJS
+*bcrypt
+*body-parser
+*cookie-session
 
 ## User Stories
 - As an avid twitter poster, I want to be able to shorten links  so that I can fit more non-link text in my tweets.
