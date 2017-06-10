@@ -89,21 +89,31 @@ app.get("/urls/new", (req, res) => {
 
 // Rendering of urls_show (/urls:id)
 app.get("/urls/:id", (req, res) => {
-  let { id } = req.params;
-  let user_id = req.session.user_id;
-  let templateVars = {
-    users,
-    user_id,
-    shortURL: id,
-    longURL: urlDatabase[user_id][id]
-  };
+  let flag = false;
 
-  for (url in urlDatabase[user_id]) {
-    if (url === id) {
-      res.render("urls_show", templateVars);
-      }
-  };
-  res.status(403).send("Error 403: Unauthorized access.");
+  if (req.session.user_id) {
+    flag = true
+    let { id } = req.params;
+    let user_id = req.session.user_id;
+    let templateVars = {
+      users,
+      user_id,
+      shortURL: id,
+      longURL: urlDatabase[user_id][id]
+    }
+
+    for (url in urlDatabase[user_id]) {
+      if (url === id) {
+        res.render("urls_show", templateVars);
+        return;
+        }
+    }
+    res.status(403).send("Error 403: Forbidden.");
+  }
+
+  if (!flag) {
+  res.status(403).send("Error 403: Forbidden.");
+  }
 });
 
 // Short-link redirection
