@@ -5,8 +5,10 @@
       <h3>Your Unique Short URL</h3>
       <a href="../u/<%= shortURL %>" target="_blank"><h3><%= shortURL %></h3></a>
       <b><%= longURL %></b>
+      <br>
+      <br>
+      <b>Date created:</b> <%= date %>
     </div>
-    <br>
     <br>
     <div class="container">
       <h4>Update</h4>
@@ -16,13 +18,23 @@
           <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </p>
+    </div>
+    <div class="container">
+      <a name="stats"><h4>Statistics</h4></a>
+      <b>Total Clickthroughs</b>:
       <br>
+      <b>Unique Visitors</b>:
+    </div>
+      <br>
+      <br>
+    <div class="container">
       <p>
         <a href="/urls"><button type="text" class="btn btn-primary form-inline">Back</button></a>
         <form method="POST" action="/urls/<%= shortURL %>?_method=DELETE">
-          <input type="submit" class="btn btn-danger form-inline" value="Delete" />
+          <input type="submit" class="btn btn-danger form-inline" value="Delete this Short URL" />
         </form>
       </p>
+    </div>
       <% } %>
 
       <% if (!user_id) { %>

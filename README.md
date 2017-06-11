@@ -16,10 +16,11 @@ Once the server is running, enter `http://localhost:8080/` in the address bar of
 - Node.js
 - Express
 - EJS
-- bcrypt
 - body-parser
 - cookie-session
 - method-override
+- bcrypt
+- moment
 
 ## User Stories
 - As an avid twitter poster, I want to be able to shorten links  so that I can fit more non-link text in my tweets.

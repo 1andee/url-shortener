@@ -8,6 +8,7 @@ const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const randomizer = require("./randomizer");
 const protocolChecker = require("./protocolChecker");
+const moment = require('moment');
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}));
@@ -68,7 +69,7 @@ app.get("/urls", (req, res) => {
   let templateVars = {
     users,
     user_id,
-    urls: urlDatabase[user_id]
+    urls: urlDatabase[user_id],
   };
   res.render("urls_index", templateVars);
 });
@@ -78,8 +79,7 @@ app.get("/urls/new", (req, res) => {
   var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id,
-    urls: urlDatabase[user_id]
+    user_id
   };
   if (user_id) {
     res.render("urls_new", templateVars);
@@ -101,7 +101,8 @@ app.get("/urls/:id", (req, res) => {
       users,
       user_id,
       shortURL: id,
-      longURL: urlDatabase[user_id][id]
+      longURL: urlDatabase[user_id][id]["url"],
+      date: urlDatabase[user_id][id]["date"]
     }
 
     for (url in urlDatabase[user_id]) {
@@ -125,7 +126,7 @@ app.get("/u/:shortURL", (req, res) => {
     for (url in urlDatabase[key]) {
       if (url === req.params.shortURL) {
       flag = true;
-      res.redirect(urlDatabase[key][url]);
+      res.redirect(urlDatabase[key][url]["url"]);
       return;
       }
     }
@@ -169,7 +170,6 @@ app.post("/login", (req, res) => {
         flag = true;
         req.session.user_id = users[key].id;
         res.redirect("/urls");
-        return;
       }
     }
   }
@@ -182,15 +182,22 @@ app.post("/login", (req, res) => {
 app.post("/urls", (req, res) => {
   let user_id = req.session.user_id;
   let shortURL = randomizer();
-  urlDatabase[user_id][shortURL] = protocolChecker(req.body.longURL);
+  let dateCreated = moment().format("DD MMM YYYY");
+  urlDatabase[user_id][shortURL] = {
+    url: protocolChecker(req.body.longURL),
+    date: dateCreated,
+    clickthroughs: 0,
+    uniqueClickthroughs: 0
+  };
   res.redirect("/urls/" + shortURL);
 });
 
 // Update existing shortURL
 app.put("/urls/:id", (req, res) => {
+  let { id } = req.params;
   let user_id = req.session.user_id;
-  urlDatabase[user_id][req.params.id] = protocolChecker(req.body.newURL);
-  res.redirect("/urls/" + req.params.id);
+  urlDatabase[user_id][id]["url"] = protocolChecker(req.body.newURL);
+  res.redirect("/urls/" + id);
 });
 
 // Deletion of existing short URL

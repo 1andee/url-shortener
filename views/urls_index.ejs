@@ -7,13 +7,15 @@
           <tr>
             <th>URL</th>
             <th>Short Code</th>
+            <th></th>
+            <th></th>
           </tr>
         </thead>
         <tbody>
           <% for (key in urls) { %>
             <tr>
               <td>
-                <%= urls[key] %>
+                <%= urls[key]["url"] %>
               </td>
               <td>
                 <a href="/u/<%= [key] %>" target="_blank"><%= [key] %></a>
@@ -21,10 +23,6 @@
               <td>
                 <a href="/urls/<%= [key] %>">
                 <button type="submit" class="btn btn-primary">Edit</button></a>
-              </td>
-              <td>
-                <a href="/urls/<%= [key] %>#stats">
-                <button type="submit" class="btn btn-primary">Stats</button></a>
               </td>
               <td>
                 <form method="POST" action="/urls/<%= [key] %>?_method=DELETE">
