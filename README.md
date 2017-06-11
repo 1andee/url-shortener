@@ -27,5 +27,7 @@ Once the server is running, enter `http://localhost:8080/` in the address bar of
 
 - As a twitter reader,  I want to be able to visit sites via shortened links, so that I can read interesting content.
 
+- As an avid twitter poster, I want to be able to see how many times my subscribers visit my links so that I can learn what content they like.
+
 ## Bugs
 Refer to <https://github.com/1andee/url-shortener/issues>.
