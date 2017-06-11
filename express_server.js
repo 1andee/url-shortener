@@ -103,7 +103,8 @@ app.get("/urls/:id", (req, res) => {
       shortURL: id,
       longURL: urlDatabase[user_id][id]["url"],
       date: urlDatabase[user_id][id]["date"],
-      clickthroughs:  urlDatabase[user_id][id]["clickthroughs"]
+      clickthroughs:  urlDatabase[user_id][id]["clickthroughs"],
+      uniqueClickthroughs:  urlDatabase[user_id][id]["uniqueClickthroughs"]
     }
 
     for (url in urlDatabase[user_id]) {
@@ -123,11 +124,16 @@ app.get("/urls/:id", (req, res) => {
 // Short-link redirection
 app.get("/u/:shortURL", (req, res) => {
   let flag = false;
+  let user_id = req.session.user_id;
   for (key in urlDatabase) {
     for (url in urlDatabase[key]) {
       if (url === req.params.shortURL) {
       flag = true;
       urlDatabase[key][url]["clickthroughs"]++;
+        if (!user_id) {
+        req.session.user_id = user_id;
+        urlDatabase[key][url]["uniqueClickthroughs"]++;
+        }
       res.redirect(urlDatabase[key][url]["url"]);
       return;
       }
