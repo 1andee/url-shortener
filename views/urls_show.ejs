@@ -11,6 +11,13 @@
     </div>
     <br>
     <div class="container">
+      <a name="stats"><h4>Statistics</h4></a>
+      <b>Total Clickthroughs</b>: <%= clickthroughs %>
+      <br>
+      <b>Unique Visitors</b>:
+    </div>
+    <br>
+    <div class="container">
       <h4>Update</h4>
       <p>
         <form method="POST" class="form-inline" action="/urls/<%= shortURL %>?_method=PUT">
@@ -18,12 +25,6 @@
           <button type="submit" class="btn btn-primary">Update</button>
         </form>
       </p>
-    </div>
-    <div class="container">
-      <a name="stats"><h4>Statistics</h4></a>
-      <b>Total Clickthroughs</b>:
-      <br>
-      <b>Unique Visitors</b>:
     </div>
       <br>
       <br>

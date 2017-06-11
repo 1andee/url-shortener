@@ -69,7 +69,7 @@ app.get("/urls", (req, res) => {
   let templateVars = {
     users,
     user_id,
-    urls: urlDatabase[user_id],
+    urls: urlDatabase[user_id]
   };
   res.render("urls_index", templateVars);
 });
@@ -102,7 +102,8 @@ app.get("/urls/:id", (req, res) => {
       user_id,
       shortURL: id,
       longURL: urlDatabase[user_id][id]["url"],
-      date: urlDatabase[user_id][id]["date"]
+      date: urlDatabase[user_id][id]["date"],
+      clickthroughs:  urlDatabase[user_id][id]["clickthroughs"]
     }
 
     for (url in urlDatabase[user_id]) {
@@ -126,6 +127,7 @@ app.get("/u/:shortURL", (req, res) => {
     for (url in urlDatabase[key]) {
       if (url === req.params.shortURL) {
       flag = true;
+      urlDatabase[key][url]["clickthroughs"]++;
       res.redirect(urlDatabase[key][url]["url"]);
       return;
       }
