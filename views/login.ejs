@@ -1,7 +1,6 @@
 <%- include('partials/_header') %>
 
 <div class="container">
-<% if (!user_id) { %>
   <h3>Login</h3>
   <form class="form-inline" method="POST" action="/login" >
     <label for="email">Email:</label>
@@ -14,12 +13,5 @@
     <br>
     <input type="submit" class="btn btn-primary" value="Login">
   </form>
-<% } %>
-
-<% if (user_id) { %>
-  You are already logged in!
-  <br><br>
-  Go to "My URLs" or add a new link to get started.
-<% } %>
 
 </div>

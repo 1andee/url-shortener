@@ -7,6 +7,10 @@
   .jumbotron {
     padding: 20px 20px;
   }
+
+  .alert {
+    margin-top: -30px;
+  }
   </style>
 </head>
 
@@ -35,4 +39,13 @@
     </form>
     Signed in as <%=users[user_id].email%>
   <% } %>
+
 </div>
+
+<% if (messages) { %>
+  <% for (key in messages) { %>
+    <div class="alert alert-<%= [key] %>">
+      <span><%= messages[key] %></span>
+    </div>
+  <% } %>
+<% } %>

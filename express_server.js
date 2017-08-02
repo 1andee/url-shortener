@@ -1,17 +1,22 @@
 const express = require("express");
-var methodOverride = require('method-override')
-const app = express();
-app.set("view engine", "ejs");
 const PORT = process.env.PORT || 8080; // default port 8080
+
+const methodOverride = require('method-override')
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
 const randomizer = require("./randomizer");
 const protocolChecker = require("./protocolChecker");
 const moment = require('moment');
+const flash = require('express-flash');
+
+const app = express();
+app.set("view engine", "ejs");
+
 
 app.use(methodOverride('_method'))
 app.use(bodyParser.urlencoded({extended: true}));
+app.use(flash());
 app.use(cookieSession({
   name: 'session',
   keys: ["key 1"]
@@ -47,6 +52,7 @@ app.get("/register", (req, res) => {
     user_id
   };
   if (user_id) {
+    req.flash('warning', "You are already logged in!");
     res.redirect("/urls");
   } else {
   res.render("register", templateVars);
@@ -60,7 +66,12 @@ app.get("/login", (req, res) => {
     users,
     user_id
   };
+  if (user_id) {
+    req.flash('warning', "You are already logged in!");
+    res.redirect("/urls");
+  } else {
   res.render("login", templateVars);
+  }
 });
 
 // Rendering of urls_index
@@ -71,7 +82,11 @@ app.get("/urls", (req, res) => {
     user_id,
     urls: urlDatabase[user_id]
   };
-  res.render("urls_index", templateVars);
+  if (user_id) {
+    res.render("urls_index", templateVars);
+  } else {
+    res.redirect("/login");
+  }
 });
 
 // Rendering of /urls/new
@@ -83,8 +98,7 @@ app.get("/urls/new", (req, res) => {
   };
   if (user_id) {
     res.render("urls_new", templateVars);
-  }
-  if (!user_id) {
+  } else {
     res.redirect("/login");
   }
 });
@@ -97,14 +111,15 @@ app.get("/urls/:id", (req, res) => {
     flag = true
     let { id } = req.params;
     let user_id = req.session.user_id;
+    let urlID = urlDatabase[user_id][id];
     let templateVars = {
       users,
       user_id,
       shortURL: id,
-      longURL: urlDatabase[user_id][id]["url"],
-      date: urlDatabase[user_id][id]["date"],
-      clickthroughs:  urlDatabase[user_id][id]["clickthroughs"],
-      uniqueClickthroughs:  urlDatabase[user_id][id]["uniqueClickthroughs"]
+      longURL: urlID["url"],
+      date: urlID["date"],
+      clickthroughs:  urlID["clickthroughs"],
+      uniqueClickthroughs:  urlID["uniqueClickthroughs"]
     }
 
     for (url in urlDatabase[user_id]) {
@@ -113,11 +128,13 @@ app.get("/urls/:id", (req, res) => {
         return;
         }
     }
-    res.status(403).send("Error 403: Forbidden.");
+    req.flash('danger', "That action is forbidden.");
+    res.redirect("/")
   }
 
   if (!flag) {
-  res.status(403).send("Error 403: Forbidden.");
+  req.flash('danger', "That action is forbidden.");
+  res.redirect("/")
   }
 });
 
@@ -140,7 +157,8 @@ app.get("/u/:shortURL", (req, res) => {
     }
   }
   if (!flag) {
-  res.status(404).send("Error 404: Something blew up. File not found.");
+  req.flash('danger', "Something blew up. That short URL couldn't be found.");
+  res.redirect("/")
   }
 });
 
@@ -149,22 +167,26 @@ app.post("/register", (req, res) => {
   let { email, password } = req.body;
   // Conditional checks for email
   if (email.length <= 5) {
-      res.status(400).send("Error 400: Please provide a valid email.");
+      req.flash('danger', "Please provide a valid email.");
+      res.redirect("/register")
   };
   for (key in users) {
     if (users[key].email === email) {
-      res.status(400).send("Error 400: This email is already associated with an account in our system. Please register with a different one.");
+      req.flash('warning', "This email is already associated with an account in our system. Please register with a different one.");
+      res.redirect("/register")
     };
   };
   // Conditional checks for password
   if (!password) {
-    res.status(400).send("Error 400: Please provide a password.");
+    req.flash('danger', "Please provide a password.");
+    res.redirect("/register")
   };
   // Creating new user
   let user_id = randomizer();
   req.session.user_id = user_id;
   users[user_id] = {id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
   urlDatabase[user_id] = { };
+  req.flash('success', "Your account has been successfully created. Add a new URL above to get started!");
   res.redirect("/urls");
 });
 
@@ -182,12 +204,17 @@ app.post("/login", (req, res) => {
     }
   }
   if (!flag) {
-  return res.status(403).send("Please check your username and/or password.");
+  req.flash('danger', "Please check your username and/or password.");
+  return res.redirect("/login");
   }
 });
 
 // New URL submission
 app.post("/urls", (req, res) => {
+  if (req.body.longURL.length <= 4) {
+      req.flash('warning', "Please enter a valid URL.");
+      res.redirect("/urls/new")
+  } else {
   let user_id = req.session.user_id;
   let shortURL = randomizer();
   let dateCreated = moment().format("DD MMM YYYY");
@@ -197,7 +224,8 @@ app.post("/urls", (req, res) => {
     clickthroughs: 0,
     uniqueClickthroughs: 0
   };
-  res.redirect("/urls/" + shortURL);
+  return res.redirect("/urls/" + shortURL);
+  }
 });
 
 // Update existing shortURL
@@ -205,6 +233,7 @@ app.put("/urls/:id", (req, res) => {
   let { id } = req.params;
   let user_id = req.session.user_id;
   urlDatabase[user_id][id]["url"] = protocolChecker(req.body.newURL);
+  req.flash('warning', "The details for this URL have been updated.");
   res.redirect("/urls/" + id);
 });
 
@@ -212,6 +241,7 @@ app.put("/urls/:id", (req, res) => {
 app.delete("/urls/:id", (req, res) => {
   let user_id = req.session.user_id;
   delete urlDatabase[user_id][req.params.id];
+  req.flash('warning', "This URL has been deleted");
   res.redirect('/urls');
 });
 
