@@ -75,7 +75,7 @@ app.get("/login", (req, res) => {
 app.get("/urls", (req, res) => {
   let templateVars = {
     users,
-    user_id: req.session.user_id
+    user_id: req.session.user_id,
     urls: urlDatabase[user_id]
   };
   if (user_id) {
@@ -242,7 +242,7 @@ app.delete("/urls/:id", (req, res) => {
 
 app.post("/logout", (req, res) => {
   req.session = null;
-  res.redirect("/");
+  res.redirect("/");cd
 });
 
 app.listen(PORT, () => {
