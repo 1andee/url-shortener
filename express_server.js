@@ -5,10 +5,10 @@ const methodOverride = require('method-override')
 const bodyParser = require("body-parser");
 const cookieSession = require('cookie-session');
 const bcrypt = require('bcrypt');
-const randomizer = require("./randomizer");
-const protocolChecker = require("./protocolChecker");
 const moment = require('moment');
 const flash = require('express-flash');
+const randomizer = require("./lib/randomizer");
+const protocolChecker = require("./lib/protocolChecker");
 
 const app = express();
 app.set("view engine", "ejs");
@@ -55,8 +55,8 @@ app.get("/register", (req, res) => {
     req.flash('warning', "You are already logged in!");
     res.redirect("/urls");
   } else {
-  res.render("register", templateVars);
-}
+    res.render("register", templateVars);
+  }
 });
 
 // Rendering of login page
@@ -70,7 +70,7 @@ app.get("/login", (req, res) => {
     req.flash('warning', "You are already logged in!");
     res.redirect("/urls");
   } else {
-  res.render("login", templateVars);
+    res.render("login", templateVars);
   }
 });
 
@@ -105,60 +105,60 @@ app.get("/urls/new", (req, res) => {
 
 // Rendering of urls_show (/urls:id)
 app.get("/urls/:id", (req, res) => {
-  let flag = false;
+  let urlFound = false;
 
   if (req.session.user_id) {
-    flag = true
+    urlFound = true
     let { id } = req.params;
     let user_id = req.session.user_id;
-    let urlID = urlDatabase[user_id][id];
+    let urlEntry = urlDatabase[user_id][id];
     let templateVars = {
       users,
       user_id,
       shortURL: id,
-      longURL: urlID["url"],
-      date: urlID["date"],
-      clickthroughs:  urlID["clickthroughs"],
-      uniqueClickthroughs:  urlID["uniqueClickthroughs"]
+      longURL: urlEntry["url"],
+      date: urlEntry["date"],
+      clickthroughs:  urlEntry["clickthroughs"],
+      uniqueClickthroughs:  urlEntry["uniqueClickthroughs"]
     }
 
     for (url in urlDatabase[user_id]) {
       if (url === id) {
         res.render("urls_show", templateVars);
         return;
-        }
+      }
     }
     req.flash('danger', "That action is forbidden.");
     res.redirect("/")
   }
 
-  if (!flag) {
-  req.flash('danger', "That action is forbidden.");
-  res.redirect("/")
+  if (!urlFound) {
+    req.flash('danger', "That action is forbidden.");
+    res.redirect("/")
   }
 });
 
 // Short-link redirection
 app.get("/u/:shortURL", (req, res) => {
-  let flag = false;
+  let urlFound = false;
   let user_id = req.session.user_id;
   for (key in urlDatabase) {
     for (url in urlDatabase[key]) {
       if (url === req.params.shortURL) {
-      flag = true;
-      urlDatabase[key][url]["clickthroughs"]++;
+        urlFound = true;
+        urlDatabase[key][url]["clickthroughs"]++;
         if (!user_id) {
-        req.session.user_id = user_id;
-        urlDatabase[key][url]["uniqueClickthroughs"]++;
+          req.session.user_id = user_id;
+          urlDatabase[key][url]["uniqueClickthroughs"]++;
         }
-      res.redirect(urlDatabase[key][url]["url"]);
-      return;
+        res.redirect(urlDatabase[key][url]["url"]);
+        return;
       }
     }
   }
-  if (!flag) {
-  req.flash('danger', "Something blew up. That short URL couldn't be found.");
-  res.redirect("/")
+  if (!urlFound) {
+    req.flash('danger', "That short URL couldn't be found.");
+    res.redirect("/")
   }
 });
 
@@ -167,8 +167,8 @@ app.post("/register", (req, res) => {
   let { email, password } = req.body;
   // Conditional checks for email
   if (email.length <= 5) {
-      req.flash('danger', "Please provide a valid email.");
-      res.redirect("/register")
+    req.flash('danger', "Please provide a valid email.");
+    res.redirect("/register")
   };
   for (key in users) {
     if (users[key].email === email) {
@@ -192,39 +192,39 @@ app.post("/register", (req, res) => {
 
 // Login form data
 app.post("/login", (req, res) => {
-  let flag = false;
+  let userFound = false;
   let { email, password } = req.body;
   for (key in users) {
     if (users[key].email === email) {
       if (bcrypt.compareSync(password, users[key].password)) {
-        flag = true;
+        userFound = true;
         req.session.user_id = users[key].id;
         res.redirect("/urls");
       }
     }
   }
-  if (!flag) {
-  req.flash('danger', "Please check your username and/or password.");
-  return res.redirect("/login");
+  if (!userFound) {
+    req.flash('danger', "Please check your username and/or password.");
+    return res.redirect("/login");
   }
 });
 
 // New URL submission
 app.post("/urls", (req, res) => {
   if (req.body.longURL.length <= 4) {
-      req.flash('warning', "Please enter a valid URL.");
-      res.redirect("/urls/new")
+    req.flash('warning', "Please enter a valid URL.");
+    res.redirect("/urls/new")
   } else {
-  let user_id = req.session.user_id;
-  let shortURL = randomizer();
-  let dateCreated = moment().format("DD MMM YYYY");
-  urlDatabase[user_id][shortURL] = {
-    url: protocolChecker(req.body.longURL),
-    date: dateCreated,
-    clickthroughs: 0,
-    uniqueClickthroughs: 0
-  };
-  return res.redirect("/urls/" + shortURL);
+    let user_id = req.session.user_id;
+    let shortURL = randomizer();
+    let dateCreated = moment().format("DD MMM YYYY");
+    urlDatabase[user_id][shortURL] = {
+      url: protocolChecker(req.body.longURL),
+      date: dateCreated,
+      clickthroughs: 0,
+      uniqueClickthroughs: 0
+    };
+    return res.redirect("/urls/" + shortURL);
   }
 });
 
