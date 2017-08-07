@@ -32,10 +32,9 @@ const users = {
 
 // Main page rendering
 app.get("/", (req, res) => {
-  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id
+    user_id: req.session.user_id
   };
   if (user_id) {
     res.redirect("/urls");
@@ -46,10 +45,9 @@ app.get("/", (req, res) => {
 
 // Rendering of registration page (re-directs those already logged in)
 app.get("/register", (req, res) => {
-  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id
+    user_id: req.session.user_id
   };
   if (user_id) {
     req.flash('warning', "You are already logged in!");
@@ -61,10 +59,9 @@ app.get("/register", (req, res) => {
 
 // Rendering of login page
 app.get("/login", (req, res) => {
-  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id
+    user_id: req.session.user_id
   };
   if (user_id) {
     req.flash('warning', "You are already logged in!");
@@ -76,10 +73,9 @@ app.get("/login", (req, res) => {
 
 // Rendering of urls_index
 app.get("/urls", (req, res) => {
-  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id,
+    user_id: req.session.user_id
     urls: urlDatabase[user_id]
   };
   if (user_id) {
@@ -91,10 +87,9 @@ app.get("/urls", (req, res) => {
 
 // Rendering of /urls/new
 app.get("/urls/new", (req, res) => {
-  var user_id = req.session.user_id;
   let templateVars = {
     users,
-    user_id
+    user_id: req.session.user_id
   };
   if (user_id) {
     res.render("urls_new", templateVars);
@@ -184,8 +179,8 @@ app.post("/register", (req, res) => {
   // Creating new user
   let user_id = randomizer();
   req.session.user_id = user_id;
-  users[user_id] = {id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
-  urlDatabase[user_id] = { };
+  users[user_id] = { id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
+  urlDatabase[user_id] = {};
   req.flash('success', "Your account has been successfully created. Add a new URL above to get started!");
   res.redirect("/urls");
 });
