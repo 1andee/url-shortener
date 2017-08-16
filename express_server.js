@@ -119,7 +119,8 @@ app.get("/urls/:id", (req, res) => {
       longURL: urlEntry["url"],
       date: urlEntry["date"],
       clickthroughs:  urlEntry["clickthroughs"],
-      uniqueClickthroughs:  urlEntry["uniqueClickthroughs"]
+      uniqueClickthroughs:  urlEntry["uniqueClickthroughs"],
+      visitors:  urlEntry["visitors"]
     }
 
     for (url in urlDatabase[user_id]) {
@@ -147,10 +148,25 @@ app.get("/u/:shortURL", (req, res) => {
       if (url === req.params.shortURL) {
         urlFound = true;
         urlDatabase[key][url]["clickthroughs"]++;
-        if (!user_id) {
-          req.session.user_id = user_id;
-          urlDatabase[key][url]["uniqueClickthroughs"]++;
+        if (user_id) {
+          if (urlDatabase[key][url]["visitors"][user_id] == undefined) {
+            urlDatabase[key][url]["visitors"][user_id] = [];
+            urlDatabase[key][url]["visitors"][user_id].push(moment().format("DD MMM YYYY HH:mm A"));
+          } else {
+            urlDatabase[key][url]["visitors"][user_id].push(moment().format("DD MMM YYYY HH:mm A"));
+          }
         }
+        if (!user_id) {
+          let user_id = randomizer();
+          req.session.user_id = user_id;
+          urlDatabase[key][url]["visitors"][user_id] = [];
+          urlDatabase[key][url]["visitors"][user_id].push(moment().toDate());
+        }
+        let k = 0;
+        for (visitor in urlDatabase[key][url]["visitors"]) {
+          k++
+        }
+        urlDatabase[key][url]["uniqueClickthroughs"] = k;
         res.redirect(urlDatabase[key][url]["url"]);
         return;
       }
@@ -185,7 +201,7 @@ app.post("/register", (req, res) => {
   let user_id = randomizer();
   req.session.user_id = user_id;
   users[user_id] = {id: user_id, email: email, password: bcrypt.hashSync(password, 10) };
-  urlDatabase[user_id] = { };
+  urlDatabase[user_id] = {};
   req.flash('success', "Your account has been successfully created. Add a new URL above to get started!");
   res.redirect("/urls");
 });
@@ -221,13 +237,9 @@ app.post("/urls", (req, res) => {
     urlDatabase[user_id][shortURL] = {
       url: protocolChecker(req.body.longURL),
       date: dateCreated,
-      // clickthroughs: 0,
-      // uniqueClickthroughs: 0
-      analytics: {
-        clickthroughts: 0,
-        uniqueClickthroughs: 0,
-        visits: []
-      }
+      clickthroughs: 0,
+      uniqueClickthroughs: 0,
+      visitors: {}
     };
     return res.redirect("/urls/" + shortURL);
   }

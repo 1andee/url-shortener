@@ -18,6 +18,26 @@
     </div>
     <br>
     <div class="container">
+      <h4>Visitor Log</h4>
+      <table>
+      <% for (i in visitors) { %>
+        <tr>
+          <td style="padding-top: 10px;">
+            <b>user_id:</b> <%= i %>
+          </td>
+        </tr>
+          <% for (k in i) { %>
+            <tr>
+            <td>
+            <%= visitors[i][k] %>
+          </td>
+        </tr>
+          <% } %>
+      <% } %>
+  </table>
+    </div>
+    <br>
+    <div class="container">
       <h4>Update</h4>
       <p>
         <form method="POST" class="form-inline" action="/urls/<%= shortURL %>?_method=PUT">
