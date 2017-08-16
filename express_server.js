@@ -221,8 +221,13 @@ app.post("/urls", (req, res) => {
     urlDatabase[user_id][shortURL] = {
       url: protocolChecker(req.body.longURL),
       date: dateCreated,
-      clickthroughs: 0,
-      uniqueClickthroughs: 0
+      // clickthroughs: 0,
+      // uniqueClickthroughs: 0
+      analytics: {
+        clickthroughts: 0,
+        uniqueClickthroughs: 0,
+        visits: []
+      }
     };
     return res.redirect("/urls/" + shortURL);
   }
