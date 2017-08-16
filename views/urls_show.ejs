@@ -40,7 +40,7 @@
     <div class="container">
       <h4>Update</h4>
       <p>
-        <form method="POST" class="form-inline" action="/urls/<%= shortURL %>?_method=PUT">
+        <form method="POST" class="form-inline" action="/urls/urls/<%= shortURL %>?_method=PUT">
           <input type="text" style="width: 50%;" class="form-control" id="newURL" name="newURL" placeholder="<%= longURL %>">
           <button type="submit" class="btn btn-primary">Update</button>
         </form>
@@ -51,7 +51,7 @@
     <div class="container">
       <p>
         <a href="/urls"><button type="text" class="btn btn-primary form-inline">Back</button></a>
-        <form method="POST" action="/urls/<%= shortURL %>?_method=DELETE">
+        <form method="POST" action="/urls/urls/<%= shortURL %>?_method=DELETE">
           <input type="submit" class="btn btn-danger form-inline" value="Delete this Short URL" />
         </form>
       </p>
