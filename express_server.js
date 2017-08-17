@@ -151,22 +151,25 @@ app.get("/u/:shortURL", (req, res) => {
       if (url === req.params.shortURL) {
         urlFound = true;
         urlDatabase[key][url]["clickthroughs"]++;
+        let visitorLog = urlDatabase[key][url]["visitors"];
+
         if (user_id) {
-          if (urlDatabase[key][url]["visitors"][user_id] == undefined) {
-            urlDatabase[key][url]["visitors"][user_id] = [];
-            urlDatabase[key][url]["visitors"][user_id].push(moment().format("DD MMM YYYY HH:mm A"));
+          if (visitorLog[user_id] == undefined) {
+            visitorLog[user_id] = [];
+            visitorLog[user_id].push(moment().format("DD MMM YYYY HH:mm A"));
           } else {
-            urlDatabase[key][url]["visitors"][user_id].push(moment().format("DD MMM YYYY HH:mm A"));
+            visitorLog[user_id].push(moment().format("DD MMM YYYY HH:mm A"));
           }
         }
         if (!user_id) {
           let user_id = randomizer();
           req.session.user_id = user_id;
-          urlDatabase[key][url]["visitors"][user_id] = [];
-          urlDatabase[key][url]["visitors"][user_id].push(moment().format("DD MMM YYYY HH:mm A"));
+          visitorLog[user_id] = [];
+          visitorLog[user_id].push(moment().format("DD MMM YYYY HH:mm A"));
         }
+
         let k = 0;
-        for (visitor in urlDatabase[key][url]["visitors"]) {
+        for (visitor in visitorLog) {
           k++
         }
         urlDatabase[key][url]["uniqueClickthroughs"] = k;
